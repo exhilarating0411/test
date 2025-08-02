@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Image Generator</title>
+</head>
+<body>
+    <button id="genButton">生成图片</button>
+    <div id="imageContainer"></div>
+
+    <script>
+        document.getElementById('genButton').addEventListener('click', () => {
+            const imgContainer = document.getElementById('imageContainer');
+            imgContainer.innerHTML = '正在生成...';
+
+            // 请求后端的Serverless Function
+            fetch('/api/generate-image')
+                .then(response => response.blob()) // 将响应转为Blob对象
+                .then(blob => {
+                    const imageUrl = URL.createObjectURL(blob);
+                    imgContainer.innerHTML = `<img src="${imageUrl}" alt="Generated Image">`;
+                })
+                .catch(error => {
+                    imgContainer.innerHTML = '生成失败!';
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
